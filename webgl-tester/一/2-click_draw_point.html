@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Click Draw Point</title>
+    <script src="/utils/index.js"></script>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas')
+        const gl = canvas.getContext('webgl')
+
+        // 顶点着色器
+        const VSHADER_SOURCE = [
+            'attribute vec4 a_Position;', // 定义一个变量
+            'void main() {',
+            '    gl_Position = a_Position;', // 定义点的位置
+            '    gl_PointSize = 10.0;', // 定义点的大小
+            '}',
+        ].join('\n')
+
+        // 片原着色器
+        const FSHADER_SOURCE = [
+            'void main() {',
+            '    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);',
+            '}',
+        ].join('\n')
+
+        if (gl) {
+            // initShader 定义在 utils/index.js 中，用于创建 program 并绑定着色器
+            if (GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+                function clearCanvas () {
+                    gl.clearColor(0.0, 0.0, 0.0, 1.0)
+                    gl.clear(gl.COLOR_BUFFER_BIT)
+                }
+
+                clearCanvas()
+
+                // 获取 a_Position 的存储位置
+                const a_Position = gl.getAttribLocation(gl.program, 'a_Position')
+
+                if (a_Position < 0) {
+                    console.error('can\'t get a_Position!')
+                } else {
+                    const { top, left } = canvas.getBoundingClientRect()
+                    canvas.addEventListener('click', e => {
+                        const x = (e.clientX - left) * 2 / canvas.width - 1
+                        const y = 1 - (e.clientY - top) * 2 / canvas.height
+                        gl.vertexAttrib3f(a_Position, x, y, 0.0) // 设置属性值
+                        clearCanvas()
+
+                        gl.drawArrays(gl.POINTS, 0, 1) // 画点
+                    })
+                }
+            }
+        }
+    </script>
+</body>
+</html>

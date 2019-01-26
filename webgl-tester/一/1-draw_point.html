@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Draw Point</title>
+    <script src="/utils/index.js"></script>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const gl = document.getElementById('canvas').getContext('webgl')
+
+        // 顶点着色器
+        const VSHADER_SOURCE = [
+            'void main() {',
+            '    gl_Position = vec4(0.0, 0.0, 0.0, 1.0);', // 定义点的位置
+            '    gl_PointSize = 10.0;', // 定义点的大小
+            '}',
+        ].join('\n')
+
+        // 片原着色器
+        const FSHADER_SOURCE = [
+            'void main() {',
+            '    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);',
+            '}',
+        ].join('\n')
+
+        if (gl) {
+            // initShader 定义在 utils/index.js 中，用于创建 program 并绑定着色器
+            if (GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+                gl.clearColor(0.0, 0.0, 0.0, 0.0)
+                gl.clear(gl.COLOR_BUFFER_BIT)
+
+                gl.drawArrays(gl.POINTS, 0, 2)
+            }
+        }
+    </script>
+</body>
+</html>

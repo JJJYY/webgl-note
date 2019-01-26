@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Click Draw Colorful Points</title>
+    <script src="/utils/index.js"></script>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas')
+        const gl = canvas.getContext('webgl')
+
+        // 顶点着色器
+        const VSHADER_SOURCE = [
+            'attribute vec4 a_Position;', // 定义一个变量
+            'attribute float a_PointSize;', // 定义一个变量
+            'void main() {',
+            '    gl_Position = a_Position;', // 定义点的位置
+            '    gl_PointSize = a_PointSize;', // 定义点的大小
+            '}',
+        ].join('\n')
+
+        // 片原着色器
+        const FSHADER_SOURCE = [
+            'precision mediump float;',
+            'uniform vec4 u_FragColor;', // 定义一个变量
+            'void main() {',
+            '    gl_FragColor = u_FragColor;',
+            '}',
+        ].join('\n')
+
+        if (gl) {
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            // initShader 定义在 utils/index.js 中，用于创建 program 并绑定着色器
+            if (GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+                function clearBuffer () {
+                    gl.clearColor(0.0, 0.0, 0.0, 1.0)
+                    gl.clear(gl.COLOR_BUFFER_BIT)
+                }
+
+                clearBuffer()
+
+                // 获取 a_Position 的存储位置
+                const a_Position = gl.getAttribLocation(gl.program, 'a_Position')
+                const a_PointSize = gl.getAttribLocation(gl.program, 'a_PointSize')
+                const u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor')
+
+                if (a_Position < 0) {
+                    console.error('can\'t get a_Position!')
+                } else {
+                    const { top, left } = canvas.getBoundingClientRect()
+                    const points = []
+                    const random = Math.random
+
+                    let x = 0
+                    let y = 0
+                    let lastX = 0
+                    let lastY = 0
+                    canvas.addEventListener('mousemove', e => {
+                        x = (e.clientX - left) * 2 / canvas.width - 1
+                        y = 1 - (e.clientY - top) * 2 / canvas.height
+
+                        if (Math.abs(lastX - x) > 0.05 || Math.abs(lastY - y) > 0.05) {
+                            addPoint()
+                        }
+                    })
+
+                    function addPoint () {
+                        const color = [random(), random(), random()]
+                        points.push([x, y, 0, ...color, 1])
+                        lastX = x
+                        lastY = y
+                    }
+
+                    function drawPoint () {
+                        if (points.length > 5) {
+                            points.splice(0, points.length - 5)
+                        }
+                        clearBuffer()
+
+                        points.forEach((point, index) => {
+                            gl.vertexAttrib3f(a_Position, point[0], point[1], 0.0) // 设置属性值
+                            gl.vertexAttrib1f(a_PointSize, point[2]) // 设置属性值
+                            gl.uniform4f(u_FragColor, point[3], point[4], point[5], point[6]) // 设置属性值
+                            gl.drawArrays(gl.POINTS, 0, 1) // 画点
+                        })
+                    }
+
+                    let lastTime = Date.now()
+                    function render () {
+                        requestAnimationFrame(render)
+
+                        const now = Date.now()
+
+                        points.forEach((point, index) => {
+                            point[2] += 2
+                            point[6] = Math.max(point[6] - 0.02, 0)
+                        })
+
+                        if (now - lastTime > 1000) {
+                            addPoint()
+
+                            lastTime = now
+                        }
+
+                        drawPoint()
+                    }
+
+                    render()
+                }
+            }
+        }
+    </script>
+</body>
+</html>
