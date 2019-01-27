@@ -28,7 +28,7 @@ ctx.getContext('webgl') // 获取 webgl 上下文
 **片元着色器：** 进行逐片元处理过程如光照的程序。片元是一个 webgl 的术语，可以将其理解为像素。
 
 着色器可以通过下图理解：
-![webgl 着色器]()
+![webgl 着色器](https://jjjyy.github.io/webgl-note/images/webgl%E7%9D%80%E8%89%B2%E5%99%A8.png)
 
 上面的概念知道就好，下面我们来画个点，理解下着色器。
 
