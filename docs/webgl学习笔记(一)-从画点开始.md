@@ -6,7 +6,7 @@
 ## 什么是 webgl
 简单来说 webgl 为浏览器提供了渲染复杂三维图形的能力，不了解的可以自行搜索，这里不在赘述。
 
-## canvans 创建 webgl 上下文
+## canvas 创建 webgl 上下文
 html
 ```html
 <canvas id='canvas'></canvas>
@@ -18,7 +18,7 @@ const ctx = document.getElementById('canvas')
 ctx.getContext('webgl') // 获取 webgl 上下文
 ```
 
-对 canvas 比较了解的同学应该知道`ctx.getContext`存在两个选项`2d`/`webgl`，前者用来创建 2d 渲染上下文，后者用来创建 webgl 渲染上下文，这里主要是针对 webgl 绘制上下文的学习。  
+对 canvas 比较了解的同学应该知道`ctx.getContext`存在两个选项`2d`/`webgl`，前者用来创建 2d 渲染上下文，后者用来创建 webgl 渲染上下文，这里主要是针对 webgl 绘制上下文的学习。  
 
 一个问题：假如我们描述一个点需要怎样描述？  
 我们需要描述这个点的位置、大小、颜色，那么这些属性在 webgl 中就可以通过**顶点着色器与片元着色器**来进行描述。
