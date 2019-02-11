@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Triangle</title>
+  <script src="/utils/index.js"></script>
+</head>
+<body>
+  <label for="selector">绘制模式：</label>
+  <select name="selector" id="selector">
+    <option value="0">gl.POINTS</option>
+    <option value="1">gl.LINES</option>
+    <option value="2">gl.LINE_STRIP</option>
+    <option value="3">gl.LINE_LOOP</option>
+    <option value="4">gl.TRIANGLES</option>
+    <option value="5">gl.TRIANGLE_STRIP</option>
+    <option value="6">gl.TRIANGLE_FAN</option>
+  </select>
+  <br />
+  <br />
+  <canvas id="canvas" width="600" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas')
+    const gl = canvas.getContext('webgl')
+
+    // 顶点着色器
+    const VSHADER_SOURCE = [
+      'attribute vec4 a_Position;',
+      'void main() {',
+      '    gl_Position = a_Position;', // 定义点的位置
+      '    gl_PointSize = 10.0;', // 定义点的大小
+      '}',
+    ].join('\n')
+
+    // 片原着色器
+    const FSHADER_SOURCE = [
+      'void main() {',
+      '    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);',
+      '}',
+    ].join('\n')
+
+    // initShader 定义在 utils/index.js 中，用于创建 program 并绑定着色器
+    if (gl && GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+
+      const a_Position = gl.getAttribLocation(gl.program, 'a_Position')
+      const vertices = new Float32Array([
+        0, -0.5, 0.5, 0, 0, 0.5, -0.5, 0
+      ])
+
+      const vertexBuffer = gl.createBuffer()
+      if (!vertexBuffer) {
+        console.error('创建Buffer失败！')
+      } else {
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
+
+        gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0)
+
+        gl.enableVertexAttribArray(a_Position)
+
+
+        function render (mode) {
+          gl.clearColor(0.0, 0.0, 0.0, 1.0)
+          gl.clear(gl.COLOR_BUFFER_BIT)
+          gl.drawArrays(mode, 0, 4)
+        }
+
+        const modeMap = [
+          gl.POINTS,
+          gl.LINES,
+          gl.LINE_STRIP,
+          gl.LINE_LOOP,
+          gl.TRIANGLES,
+          gl.TRIANGLE_STRIP,
+          gl.TRIANGLE_FAN
+        ]
+        const selector = document.getElementById('selector')
+        if (selector) {
+          selector.addEventListener('change', event => {
+            render(modeMap[selector.value])
+          })
+        }
+
+        render(modeMap[0])
+      }
+    }
+  </script>
+</body>
+
+</html>
