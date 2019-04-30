@@ -57,7 +57,7 @@ if (gl && GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
 }
 ```
 
-[使用 Buffer 绘制多个点]()
+[使用 Buffer 绘制多个点](https://jjjyy.github.io/webgl-note/webgl-tester/2/1-buffer.html)
 
 ## drawArrays
 `gl.drawArrays(mode, start, end)`提供了绘制点、线、回路等绘制模式，通过第一个参数指定不同的值，就能以 7 种不同的方式来绘制图形。
@@ -72,7 +72,7 @@ if (gl && GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
 | 三角带 | gl.TRIANGLE_STRIP | 按照(v0, v1, v2),(v1, v2, v3),... 的规则绘制三角形 |
 | 三角扇 | gl.TRIANGLE_FAN | 按照(v0, v1, v2),(v0, v2, v3),... 的规则绘制三角形 |
 
-[使用 drawArrays 绘制更多图形]()
+[使用 drawArrays 绘制更多图形](https://jjjyy.github.io/webgl-note/webgl-tester/2/2-triangle.html)
 
 ## 变换
 如果用 JS 写过动画的同学应该知道，可以通过相隔指定时间修改元素的宽、高等属性，来实现元素的动画，同样的方法我们可以通过修改指定图形的坐标来调整绘制图形的位置，进而实现动画。  
@@ -87,7 +87,7 @@ z' = z + Tz
 
 > 平移就是图形上的点全部加上相同的距离，可以通过调整 Tx、Ty、Tz 的值来实现曲线的平移效果。
 
-[图形的平移变换]()
+[图形的平移变换](https://jjjyy.github.io/webgl-note/webgl-tester/2/3-translation.html)
 
 ### 旋转
 ```
@@ -96,8 +96,6 @@ y' = x * sinα + y * cosα
 z' = z
 ```
 
-[图形的旋转变换]()
-
 ### 缩放
 ```
 x' = S * x
@@ -105,4 +103,4 @@ y' = S * y
 z' = S * z
 ```
 
-[图形的缩放变换]()
+[图形的缩放变换](https://jjjyy.github.io/webgl-note/webgl-tester/2/4-scale.html)

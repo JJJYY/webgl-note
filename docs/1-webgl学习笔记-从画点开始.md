@@ -120,4 +120,4 @@ gl.uniform4f(u_FragColor, points[i + 2], points[i + 3], points[i + 4], 1.0) // �
 在修改片原着色器过程中，漏掉了`precision mediump float;`，找到了[stackoverflow的解释](https://stackoverflow.com/questions/13780609/what-does-precision-mediump-float-mean)，在定义变量时需要告诉 GPU 变量的精度。
 
 ## 扩展一个 Demo
-使用上面的例子，写一个模仿鼠标涟漪效果的 [Demo](https://jjjyy.github.io/webgl-note/webgl-tester/%E4%B8%80/5-demo.html)，当然形状使用正方形代替。
+使用上面的例子，写一个模仿鼠标涟漪效果的 [Demo](https://jjjyy.github.io/webgl-note/webgl-tester/1/5-demo.html)，当然形状使用正方形代替。
