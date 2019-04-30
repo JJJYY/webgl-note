@@ -2,7 +2,7 @@
 ## 缓冲区
 缓冲区对象是 webgl 系统中提供的一块存储区，可以在其中保存想要绘制的所有顶点的数据，然后一次性向顶点着色器中传入数据。
 
-!(缓冲区绘制)[]
+![缓冲区绘制](https://jjjyy.github.io/webgl-note/images/webgl缓冲区.png)
 
 使用缓冲区对象向顶点着色器传入数据的步骤为：
 1. 创建缓冲区对象（`gl.createBuffer`）
@@ -11,6 +11,7 @@
 4. 将缓冲区对象分配给一个 attribute 变量（`gl.vertexAttribPointer`）
 5. 开启 attribute 变量（`gl.enableVertexAttribArray`）
 
+使用`webgl`缓冲区绘制点的代码示例：
 ```js
 const canvas = document.getElementById('canvas')
 const gl = canvas.getContext('webgl')
@@ -41,17 +42,20 @@ if (gl && GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
     0, 0, 0.5, 0.5, -0.5, -0.5
   ])
 
+  // 创建缓冲区
   const vertexBuffer = gl.createBuffer()
   if (!vertexBuffer) {
     console.error('创建Buffer失败！')
   } else {
+    // 绑定缓冲区
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
+    // 将数据写入缓冲区
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
-
+    // 指定变量
     gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0)
-
+    // 开启变量
     gl.enableVertexAttribArray(a_Position)
-
+    // 绘制缓冲区内的数据
     gl.drawArrays(gl.POINTS, 0, 3)
   }
 }
@@ -72,7 +76,17 @@ if (gl && GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
 | 三角带 | gl.TRIANGLE_STRIP | 按照(v0, v1, v2),(v1, v2, v3),... 的规则绘制三角形 |
 | 三角扇 | gl.TRIANGLE_FAN | 按照(v0, v1, v2),(v0, v2, v3),... 的规则绘制三角形 |
 
+下面我们用 Demo 来看下各种图形是怎么样的：
 [使用 drawArrays 绘制更多图形](https://jjjyy.github.io/webgl-note/webgl-tester/2/2-triangle.html)
+
+Demo 中我们采用不同的方式绘制了同样的缓冲区数据，得到了7中不同结果，可以结合 Demo 去理解每种类型分别的绘制规则。
+
+```js
+// Demo中绘制的缓冲区数据
+const vertices = new Float32Array([
+  0, -0.5, 0.5, 0, 0, 0.5, -0.5, 0
+])
+```
 
 ## 变换
 如果用 JS 写过动画的同学应该知道，可以通过相隔指定时间修改元素的宽、高等属性，来实现元素的动画，同样的方法我们可以通过修改指定图形的坐标来调整绘制图形的位置，进而实现动画。  
@@ -87,7 +101,7 @@ z' = z + Tz
 
 > 平移就是图形上的点全部加上相同的距离，可以通过调整 Tx、Ty、Tz 的值来实现曲线的平移效果。
 
-[图形的平移变换](https://jjjyy.github.io/webgl-note/webgl-tester/2/3-translation.html)
+[图形的平移变换Demo](https://jjjyy.github.io/webgl-note/webgl-tester/2/3-translation.html)
 
 ### 旋转
 ```
@@ -96,6 +110,8 @@ y' = x * sinα + y * cosα
 z' = z
 ```
 
+> 上述公式表明了，将图形以 z 轴旋转 α 角度时，x、y 的坐标变换公式。
+
 ### 缩放
 ```
 x' = S * x
@@ -103,4 +119,6 @@ y' = S * y
 z' = S * z
 ```
 
-[图形的缩放变换](https://jjjyy.github.io/webgl-note/webgl-tester/2/4-scale.html)
+> 啊，这个很好理解，乘以缩放系数就对了。
+
+[图形的缩放变换Demo](https://jjjyy.github.io/webgl-note/webgl-tester/2/4-scale.html)
