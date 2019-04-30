@@ -66,7 +66,7 @@ if (gl && GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
 | :--: | :--: | :-- |
 | 点 | gl.POINTS | 绘制 v0,...,vn 的点 |
 | 三角形 | gl.LINES | 按照 (v0, v1),(v2,v3),... 规则绘制线，点数不足将忽略 |
-| 线条 | gl.LINE_STRIP | 按照 (vs, vs+1),(vs+1,vs+2),... 规则绘制线 |
+| 线条 | gl.LINE_STRIP | 按照 (vs, vs+1),(vs+1,vs+2),... 规则绘制线 |
 | 回路 | gl.LINE_LOOP | 按照 (vs, vs+1),(vs+1,vs+2),... 规则绘制线 |
 | 三角形 | gl.TRIANGLES | 按照(v0, v1, v2),(v3, v4, v5),... 的规则绘制三角形，点数不足将忽略 |
 | 三角带 | gl.TRIANGLE_STRIP | 按照(v0, v1, v2),(v1, v2, v3),... 的规则绘制三角形 |
@@ -75,8 +75,8 @@ if (gl && GlHelper.initShader(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
 [使用 drawArrays 绘制更多图形](https://jjjyy.github.io/webgl-note/webgl-tester/2/2-triangle.html)
 
 ## 变换
-如果用 JS 写过动画的同学应该知道，可以通过相隔指定时间修改元素的宽、高等属性，来实现元素的动画，同样的方法我们可以通过修改指定图形的坐标来调整绘制图形的位置，进而实现动画。  
-由于 webgl 是建立在三维坐标系上的，对三维坐标的变换就不得不提到矩阵，这里不做详细介绍，只提供平移、旋转、缩放的简单公式，仅供参考。
+如果用 JS 写过动画的同学应该知道，可以通过相隔指定时间修改元素的宽、高等属性，来实现元素的动画，同样的方法我们可以通过修改指定图形的坐标来调整绘制图形的位置，进而实现动画。  
+由于 webgl 是建立在三维坐标系上的，对三维坐标的变换就不得不提到矩阵，这里不做详细介绍，只提供平移、旋转、缩放的简单公式，仅供参考。
 
 ### 平移
 ```
